@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JSFiddle wysmxuv3</title>
+
+  <style>
+    body {
+  margin: 0;
+  background: #000;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  height: 100vh;
+}
+.container {
+  max-width: 650px;
+  width: 100%;
+}
+#carSelect button {
+  margin: 0 10px 20px 10px;
+  padding: 10px 20px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #fff;
+  transition: box-shadow 0.3s;
+}
+#carSelect button:hover {
+  box-shadow: 0 0 20px #0ff;
+}
+canvas {
+  background: linear-gradient(90deg, #020024, #090979, #00d4ff);
+  border: 2px solid #0ff;
+  box-shadow: 0 0 20px #0ff;
+  border-radius: 10px;
+}
+#levelInfo {
+  font-size: 18px;
+  margin-top: 10px;
+}
+#message {
+  font-size: 20px;
+  margin-top: 20px;
+  min-height: 24px;
+  color: #ff4444;
+}
+#restartBtn {
+  margin-top: 15px;
+  padding: 10px 30px;
+  font-size: 16px;
+  background: #0ff;
+  border: none;
+  color: black;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #0ff;
+}
+#restartBtn:hover {
+  box-shadow: 0 0 30px #0ff;
+}
+
+  </style>
+
+  
+</head>
+<body>
+  <div class="container">
+  <div id="carSelect">
+    <p>Select Your Car:</p>
+    <button data-car="lambo" style="background:#ff0000; color:white;">Lambo</button>
+    <button data-car="mustang" style="background:#0077ff; color:white;">Mustang</button>
+    <button data-car="toyota" style="background:#00cc00; color:white;">Toyota</button>
+  </div>
+  <canvas id="gameCanvas" width="600" height="400" style="display:none;"></canvas>
+  <p id="levelInfo"></p>
+  <p id="message"></p>
+  <button id="restartBtn" style="display:none;">Restart Demo</button>
+</div>
+
+<audio id="engineSound" loop src="https://actions.google.com/sounds/v1/vehicles/car_engine_idle.ogg"></audio>
+<audio id="hitSound" src="https://actions.google.com/sounds/v1/impacts/impact_metal_sheet.ogg"></audio>
+
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const engineSound = document.getElementById('engineSound');
+const hitSound = document.getElementById('hitSound');
+
+const carSelect = document.getElementById('carSelect');
+const levelInfo = document.getElementById('levelInfo');
+const message = document.getElementById('message');
+const restartBtn = document.getElementById('restartBtn');
+
+const cars = {
+  lambo: {color: '#ff0000', width: 60, height: 30},
+  mustang: {color: '#0077ff', width: 55, height: 28},
+  toyota: {color: '#00cc00', width: 50, height: 25}
+};
+
+let selectedCar = null;
+
+const obstacleCount = 5;
+const obstacleSize = 25;
+
+let car = null;
+let obstacles = [];
+let level = 1;
+let maxLevels = 3;
+let levelTime = 20; // seconds per level
+let levelTimer = 0;
+let gameRunning = false;
+
+let keys = {};
+
+function initCar() {
+  const c = cars[selectedCar];
+  car = {
+    x: canvas.width/2,
+    y: canvas.height - 60,
+    width: c.width,
+    height: c.height,
+    color: c.color,
+    speed: 0,
+    maxSpeed: 5,
+    acceleration: 0.15,
+    deceleration: 0.1,
+    rotationSpeed: 4 * Math.PI / 180,
+    angle: -Math.PI / 2 // facing up
+  };
+}
+
+function spawnObstacles() {
+  obstacles = [];
+  for (let i=0; i < obstacleCount; i++) {
+    obstacles.push({
+      x: Math.random()*(canvas.width - obstacleSize),
+      y: Math.random()*(canvas.height/2),
+      width: obstacleSize,
+      height: obstacleSize,
+      color: '#ff00ff'
+    });
+  }
+}
+
+function drawCar() {
+  ctx.save();
+  ctx.translate(car.x, car.y);
+  ctx.rotate(car.angle);
+
+  ctx.shadowColor = car.color;
+  ctx.shadowBlur = 15;
+
+  ctx.fillStyle = car.color;
+  ctx.fillRect(-car.width/2, -car.height/2, car.width, car.height);
+
+  ctx.restore();
+}
+
+function drawObstacles() {
+  obstacles.forEach(ob => {
+    ctx.shadowColor = '#ff00ff';
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = ob.color;
+    ctx.fillRect(ob.x, ob.y, ob.width, ob.height);
+  });
+}
+
+function updateCar() {
+  if (keys['ArrowUp']) {
+    car.speed += car.acceleration;
+  } else if (keys['ArrowDown']) {
+    car.speed -= car.acceleration;
+  } else {
+    if (car.speed > 0) {
+      car.speed -= car.deceleration;
+      if (car.speed < 0) car.speed = 0;
+    } else if (car.speed < 0) {
+      car.speed += car.deceleration;
+      if (car.speed > 0) car.speed = 0;
+    }
+  }
+
+  if (car.speed > car.maxSpeed) car.speed = car.maxSpeed;
+  if (car.speed < -car.maxSpeed / 2) car.speed = -car.maxSpeed / 2;
+
+  if (keys['ArrowLeft']) {
+    car.angle -= car.rotationSpeed * (car.speed / car.maxSpeed);
+  }
+  if (keys['ArrowRight']) {
+    car.angle += car.rotationSpeed * (car.speed / car.maxSpeed);
+  }
+
+  car.x += Math.cos(car.angle) * car.speed;
+  car.y += Math.sin(car.angle) * car.speed;
+
+  // Keep car inside canvas bounds
+  if (car.x < car.width/2) car.x = car.width/2;
+  if (car.x > canvas.width - car.width/2) car.x = canvas.width - car.width/2;
+  if (car.y < car.height/2) car.y = car.height/2;
+  if (car.y > canvas.height - car.height/2) car.y = canvas.height - car.height/2;
+}
+
+function checkCollisions() {
+  for (const ob of obstacles) {
+    if (
+      car.x + car.width/2 > ob.x &&
+      car.x - car.width/2 < ob.x + ob.width &&
+      car.y + car.height/2 > ob.y &&
+      car.y - car.height/2 < ob.y + ob.height
+    ) {
+      // Collision!
+      hitSound.play();
+      message.textContent = "You hit an obstacle! Restarting level...";
+      resetLevel();
+      return;
+    }
+  }
+  message.textContent = '';
+}
+
+function resetLevel() {
+  car.x = canvas.width/2;
+  car.y = canvas.height - 60;
+  car.speed = 0;
+  spawnObstacles();
+  levelTimer = 0;
+}
+
+function gameLoop(timestamp) {
+  if (!gameRunning) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  updateCar();
+  drawCar();
+  drawObstacles();
+  checkCollisions();
+
+  levelTimer += 1/60; // assuming 60fps approx
+  levelInfo.textContent = `Level: ${level} / ${maxLevels} — Survive ${(levelTime - Math.floor(levelTimer))}s`;
+
+  if (levelTimer >= levelTime) {
+    level++;
+    if (level > maxLevels) {
+      levelInfo.textContent = `🎉 You completed all levels! 🎉`;
+      message.textContent = 'Demo over. Thanks for playing!';
+      gameRunning = false;
+      engineSound.pause();
+      restartBtn.style.display = 'inline-block';
+      return;
+    }
+    resetLevel();
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+function startGame() {
+  carSelect.style.display = 'none';
+  canvas.style.display = 'block';
+  restartBtn.style.display = 'none';
+  message.textContent = '';
+  level = 1;
+  initCar();
+  spawnObstacles();
+  levelTimer = 0;
+  gameRunning = true;
+  engineSound.play();
+  requestAnimationFrame(gameLoop);
+}
+
+restartBtn.onclick = () => {
+  startGame();
+};
+
+carSelect.querySelectorAll('button').forEach(btn => {
+  btn.onclick = () => {
+    selectedCar = btn.dataset.car;
+    startGame();
+  };
+});
+
+window.addEventListener('keydown', e => {
+  keys[e.key] = true;
+});
+window.addEventListener('keyup', e => {
+  keys[e.key] = false;
+  if (!keys['ArrowUp']) engineSound.pause();
+});
+window.addEventListener('keydown', e => {
+  if (e.key === 'ArrowUp') engineSound.play();
+});
+
+  </script>
+</body>
+</html>

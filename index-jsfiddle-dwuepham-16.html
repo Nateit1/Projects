@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create a simple racing game</title>
+
+  <style>
+    body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+#gameContainer {
+  position: relative;
+  width: 400px;
+  margin: auto;
+}
+canvas {
+  background: #111;
+  display: block;
+  margin: auto;
+  border: 2px solid #444;
+}
+#score {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+  </style>
+
+  
+</head>
+<body>
+  <div id="gameContainer">
+  <canvas id="gameCanvas" width="400" height="600"></canvas>
+  <div id="score">Score: 0</div>
+</div>
+
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let car = {
+  x: 175,
+  y: 500,
+  width: 50,
+  height: 80,
+  speed: 5
+};
+
+let obstacles = [];
+let score = 0;
+let gameOver = false;
+
+function drawCar() {
+  ctx.fillStyle = "red";
+  ctx.fillRect(car.x, car.y, car.width, car.height);
+}
+
+function drawObstacles() {
+  ctx.fillStyle = "white";
+  for (let obs of obstacles) {
+    ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+  }
+}
+
+function updateObstacles() {
+  for (let obs of obstacles) {
+    obs.y += 4;
+    if (obs.y > canvas.height) {
+      obs.y = -60;
+      obs.x = Math.random() * (canvas.width - 40);
+      score++;
+      document.getElementById("score").innerText = "Score: " + score;
+    }
+
+    // Collision
+    if (
+      obs.x < car.x + car.width &&
+      obs.x + obs.width > car.x &&
+      obs.y < car.y + car.height &&
+      obs.y + obs.height > car.y
+    ) {
+      gameOver = true;
+    }
+  }
+}
+
+function gameLoop() {
+  if (gameOver) {
+    ctx.fillStyle = "white";
+    ctx.font = "30px Arial";
+    ctx.fillText("Game Over!", 110, 300);
+    return;
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawCar();
+  drawObstacles();
+  updateObstacles();
+  requestAnimationFrame(gameLoop);
+}
+
+function initObstacles() {
+  for (let i = 0; i < 5; i++) {
+    obstacles.push({
+      x: Math.random() * (canvas.width - 40),
+      y: -i * 150,
+      width: 40,
+      height: 40
+    });
+  }
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft" && car.x > 0) car.x -= car.speed;
+  if (e.key === "ArrowRight" && car.x < canvas.width - car.width)
+    car.x += car.speed;
+});
+
+initObstacles();
+gameLoop();
+
+  </script>
+</body>
+</html>
