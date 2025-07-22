@@ -10,6 +10,9 @@ Tech: Three.js, HTML, CSS, JavaScript
 
 Built a weather app featuring a spinning 3D Earth globe. Users can enter a city name and view simulated weather details like temperature, humidity, and wind, powered by a custom mock API.
 
+<img width="563" height="214" alt="Untitled22" src="https://github.com/user-attachments/assets/1e8d667c-84a8-4588-8c8b-75de0d1a1033" />
+
+
 🚗 2D Car Model
 
 Tech: HTML Canvas, JavaScript
