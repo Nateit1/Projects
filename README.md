@@ -10,6 +10,7 @@ Tech: Three.js, HTML, CSS, JavaScript
 
 Built a weather app featuring a spinning 3D Earth globe. Users can enter a city name and view simulated weather details like temperature, humidity, and wind, powered by a custom mock API.
 
+<img width="1378" height="801" alt="Untitled6" src="https://github.com/user-attachments/assets/2cf923b4-74af-439d-ac28-293bb9751a5d" />
 
 
 🚗 2D Car Model
@@ -18,11 +19,16 @@ Tech: HTML Canvas, JavaScript
 
 Created a 2D car in a dark environment that users can control with keyboard keys. Demonstrates basic physics, movement mechanics, and responsive input handling.
 
+<img width="613" height="414" alt="Untitled-4" src="https://github.com/user-attachments/assets/6b69798b-90cf-41b7-ab09-ddb967f64a03" />
+
+
 📍 GPS Tracker
 
 Tech: JavaScript, HTML/CSS
 
 Designed a location tracking interface with real-time updates and map visuals to simulate object movement across U.S. locations using mock data.
+
+<img width="594" height="350" alt="Untitled 23" src="https://github.com/user-attachments/assets/88c7f94a-4194-4a14-9ec0-bf876b20e0d1" />
 
 📊 Automatic Status Monitor
 
@@ -30,7 +36,8 @@ Tech: JavaScript
 
 Built an automated system that monitors device/system statuses and sends real-time simulated alerts to improve operational awareness and reliability.
 
-https://jsfiddle.net/Nst11/7dshbn28/10/
+<img width="563" height="214" alt="Untitled22" src="https://github.com/user-attachments/assets/931faea2-a8d7-4500-a16d-990ef1b038f1" />
+
 
 💡 Why These Projects?
 
