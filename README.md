@@ -4,6 +4,26 @@ A collection of simple but impactful projects I built to explore different areas
 
 🔧 Projects
 
+
+📊 Automatic Status Monitor
+
+Tech: JavaScript
+
+Built an automated system that monitors device/system statuses and sends real-time simulated alerts to improve operational awareness and reliability.
+
+<img width="563" height="214" alt="Untitled22" src="https://github.com/user-attachments/assets/931faea2-a8d7-4500-a16d-990ef1b038f1" />
+
+
+📍 GPS Tracker
+
+Tech: JavaScript, HTML/CSS
+
+Designed a location tracking interface with real-time updates and map visuals to simulate object movement across U.S. locations using mock data.
+
+<img width="594" height="350" alt="Untitled 23" src="https://github.com/user-attachments/assets/88c7f94a-4194-4a14-9ec0-bf876b20e0d1" />
+
+
+
 🟢 Weather App with 3D Globe
 
 Tech: Three.js, HTML, CSS, JavaScript
@@ -21,22 +41,6 @@ Created a 2D car in a dark environment that users can control with keyboard keys
 
 <img width="613" height="414" alt="Untitled-4" src="https://github.com/user-attachments/assets/6b69798b-90cf-41b7-ab09-ddb967f64a03" />
 
-
-📍 GPS Tracker
-
-Tech: JavaScript, HTML/CSS
-
-Designed a location tracking interface with real-time updates and map visuals to simulate object movement across U.S. locations using mock data.
-
-<img width="594" height="350" alt="Untitled 23" src="https://github.com/user-attachments/assets/88c7f94a-4194-4a14-9ec0-bf876b20e0d1" />
-
-📊 Automatic Status Monitor
-
-Tech: JavaScript
-
-Built an automated system that monitors device/system statuses and sends real-time simulated alerts to improve operational awareness and reliability.
-
-<img width="563" height="214" alt="Untitled22" src="https://github.com/user-attachments/assets/931faea2-a8d7-4500-a16d-990ef1b038f1" />
 
 
 💡 Why These Projects?
