@@ -28,7 +28,7 @@ Designed a location tracking interface with real-time updates and map visuals to
 
 Tech: Three.js, HTML, CSS, JavaScript
 
-Built a weather app featuring a spinning 3D Earth globe. Users can enter a city name and view simulated weather details like temperature, humidity, and wind, powered by a custom mock API.
+Built a weather app featuring a spinning 3D Earth globe. Users can enter a city name and view simulated weather details like temperature, humidity, condition and wind, powered by a custom mock API.
 
 <img width="1384" height="797" alt="Untitled" src="https://github.com/user-attachments/assets/3cb13a7b-a115-4e05-b797-08e13357c0aa" />
 
