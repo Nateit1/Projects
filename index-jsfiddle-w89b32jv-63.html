@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teach safe online behavior</title>
+
+  <style>
+    body, html {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: black;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+#earthCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+}
+
+#weatherApp {
+  position: relative;
+  z-index: 10;
+  max-width: 320px;
+  margin: 40px auto;
+  padding: 20px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 10px;
+  text-align: center;
+}
+
+input {
+  padding: 8px;
+  width: 70%;
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+button {
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #005f99;
+}
+#weatherDisplay {
+      display: none;
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      max-width: 300px;
+      font-family: Arial, sans-serif;
+    }
+    #weatherDisplay p {
+      margin: 5px 0;
+    }body, html {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: black;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+#earthCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+}
+
+#weatherApp {
+  position: relative;
+  z-index: 10;
+  max-width: 320px;
+  margin: 40px auto;
+  padding: 20px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 10px;
+  text-align: center;
+}
+
+input {
+  padding: 8px;
+  width: 70%;
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+button {
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #005f99;
+}body, html {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: black;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+#earthCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+}
+
+#weatherApp {
+  position: relative;
+  z-index: 10;
+  max-width: 320px;
+  margin: 40px auto;
+  padding: 20px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 10px;
+  text-align: center;
+}
+
+input {
+  padding: 8px;
+  width: 70%;
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+button {
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #005f99;
+}
+  </style>
+
+  
+</head>
+<body>
+  <div id="weatherApp">
+  <input id="cityInput" placeholder="Enter city" />
+  <button id="fetchBtn">Get Weather</button>
+
+  <div id="weatherDisplay" style="display:none;">
+    <h2>Weather in <span id="cityName"></span></h2>
+    <p><strong>Temperature:</strong> <span id="temp"></span> °F</p>
+    <p><strong>Condition:</strong> <span id="condition"></span></p>
+    <p><strong>Humidity:</strong> <span id="humidity"></span>%</p>
+    <p><strong>Wind Speed:</strong> <span id="wind"></span> mph</p>
+  </div>
+</div>
+<canvas id="earthCanvas"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+  </script>
+
+  <script>
+     // Fake API data
+const fakeWeatherAPI = {
+   "New York": { time: "2:30 PM", temp: 25, condition: "Cloudy", humidity: 40, wind: 15 },
+  "Los Angeles": { time: "11:30 AM", temp: 29, condition: "Sunny", humidity: 35, wind: 10 },
+  "Chicago": { time: "1:30 PM", temp: 21, condition: "Rainy", humidity: 55, wind: 20 },
+  "Houston": { time: "1:30 PM", temp: 24, condition: "Thunderstorms", humidity: 65, wind: 18 },
+  "Phoenix": { time: "11:30 AM", temp: 35, condition: "Sunny", humidity: 20, wind: 7 },
+  "Philadelphia": { time: "2:30 PM", temp: 23, condition: "Partly Cloudy", humidity: 50, wind: 14 },
+  "San Antonio": { time: "12:30 PM", temp: 30, condition: "Clear", humidity: 40, wind: 13 },
+  "San Diego": { time:"11:30 AM", temp: 22, condition: "Fog", humidity: 60, wind: 9 },
+  "Dallas": { time: "1:30 PM", temp: 32, condition: "Sunny", humidity: 50, wind: 11 },
+  "San Jose": { time: "11:30 AM", temp: 26, condition: "Partly Cloudy", humidity: 45, wind: 10 },
+  "Austin": { time: "12:30 PM", temp: 31, condition: "Clear", humidity: 35, wind: 12 },
+  "Jacksonville": { time: "2:30 PM", temp: 27, condition: "Rain Showers", humidity: 70, wind: 16 },
+  "Fort Worth": { time: "1:30 PM", temp: 33, condition: "Sunny", humidity: 30, wind: 14 },
+  "Columbus": { time: "2:30 PM", temp: 20, condition: "Cloudy", humidity: 60, wind: 13 },
+  "Charlotte": { time: "2:30 PM", temp: 24, condition: "Rainy", humidity: 65, wind: 17 },
+  "San Francisco": { time: "11:30 AM", temp: 18, condition: "Fog", humidity: 75, wind: 10 },
+  "Indianapolis": { time: "2:30 PM", temp: 26, condition: "Sunny", humidity: 50, wind: 15 },
+  "Seattle": { time: "11:30 AM", temp: 19, condition: "Drizzle", humidity: 80, wind: 8 },
+  "Denver": { time: "12:30 PM", temp: 28, condition: "Sunny", humidity: 40, wind: 13 },
+  "Washington, D.C.": { time: "2:30 PM", temp: 22, condition: "Partly Cloudy", humidity: 55, wind: 12 },
+  "Boston": { time: "2:30 PM", temp: 23, condition: "Clear", humidity: 50, wind: 11 },
+  "El Paso": { time: "12:30 PM", temp: 36, condition: "Hot", humidity: 20, wind: 14 },
+  "Nashville": { time: "1:30 PM", temp: 30, condition: "Sunny", humidity: 40, wind: 15 },
+  "Detroit": { time: "2:30 PM", temp: 19, condition: "Rainy", humidity: 70, wind: 19 },
+  "Portland": { time: "11:30 AM", temp: 20, condition: "Cloudy", humidity: 65, wind: 10 },
+  "Memphis": { time: "1:30 PM", temp: 31, condition: "Sunny", humidity: 45, wind: 12 },
+  "Oklahoma City": { time: "12:30 PM", temp: 28, condition: "Windy", humidity: 35, wind: 22 },
+  "Las Vegas": { time: "11:30 AM", temp: 39, condition: "Hot", humidity: 10, wind: 9 },
+  "Louisville": { time: "2:30 PM", temp: 21, condition: "Overcast", humidity: 60, wind: 11 },
+  "Baltimore": { time: "2:30 PM", temp: 25, condition: "Clear", humidity: 50, wind: 10 },
+  "Milwaukee": { time: "1:30 PM", temp: 18, condition: "Rainy", humidity: 70, wind: 13 },
+  "Albuquerque": { time: "12:30 PM", temp: 29, condition: "Dry", humidity: 25, wind: 14 },
+  "Tucson": { time: "11:30 AM", temp: 37, condition: "Sunny", humidity: 15, wind: 11 },
+  "Fresno": { time: "11:30 AM", temp: 38, condition: "Hot", humidity: 20, wind: 7 },
+  "Sacramento": { time: "11:30 AM", temp: 30, condition: "Clear", humidity: 30, wind: 9 },
+  "Kansas City": { time: "1:30 PM", temp: 26, condition: "Thunderstorms", humidity: 60, wind: 20 },
+  "Long Beach": { time: "11:30 AM", temp: 27, condition: "Sunny", humidity: 35, wind: 10 },
+  "Mesa": { time: "11:30 AM", temp: 41, condition: "Very Hot", humidity: 10, wind: 6 },
+  "Atlanta": { time: "2:30 PM", temp: 33, condition: "Humid", humidity: 70, wind: 14 },
+  "Miami": { time: "2:30 PM", temp: 29, condition: "Rain", humidity: 80, wind: 17 },
+  "Honolulu": { time: "8:30 AM", temp: 27, condition: "Breezy", humidity: 60, wind: 20 },
+  "Anchorage": { time: "10:30 AM", temp: -2, condition: "Snow", humidity: 85, wind: 15 },
+  "Minneapolis": { time: "1:30 PM", temp: 16, condition: "Overcast", humidity: 65, wind: 12 },
+  "Arlington": { time: "1:30 PM", temp: 30, condition: "Clear", humidity: 50, wind: 14 },
+  "Tokyo": { time: "4:30 AM", temp: 27, condition: "Clear", humidity: 70, wind: 12 },
+  "London": { time: "7:30 PM", temp: 18, condition: "Rainy", humidity: 60, wind: 15 },
+  "Paris": { time: "8:30 PM", temp: 20, condition: "Cloudy", humidity: 55, wind: 10 },
+  "Berlin": { time: "8:30 PM", temp: 22, condition: "Sunny", humidity: 50, wind: 11 },
+  "Madrid": { time: "8:30 PM", temp: 29, condition: "Clear", humidity: 35, wind: 8 },
+  "Rome": { time: "8:30 PM", temp: 25, condition: "Partly Cloudy", humidity: 45, wind: 9 },
+  "Amsterdam": { time: "8:30 PM", temp: 17, condition: "Drizzle", humidity: 70, wind: 13 },
+  "Brussels": { time: "8:30 PM", temp: 16, condition: "Foggy", humidity: 80, wind: 12 },
+  "Lisbon": { time: "7:30 PM", temp: 28, condition: "Sunny", humidity: 30, wind: 11 },
+  "Vienna": { time: "8:30 PM", temp: 22, condition: "Clear", humidity: 50, wind: 10 },
+  "Prague": { time: "8:30 PM", temp: 20, condition: "Thunderstorms", humidity: 60, wind: 17 },
+  "Oslo": { time: "8:30 PM", temp: 12, condition: "Chilly", humidity: 65, wind: 14 },
+  "Copenhagen": { time: "8:30 PM", temp: 19, condition: "Breezy", humidity: 55, wind: 13 },
+  "Helsinki": { time: "9:30 PM", temp: 15, condition: "Cool", humidity: 60, wind: 9 },
+  "Stockholm": { time: "8:30 PM", temp: 16, condition: "Rain", humidity: 65, wind: 12 },
+  "Dublin": { time: "7:30 PM", temp: 17, condition: "Showers", humidity: 70, wind: 10 },
+  "Warsaw": { time: "8:30 PM", temp: 21, condition: "Partly Cloudy", humidity: 55, wind: 11 },
+  "Zurich": { time: "8:30 PM", temp: 20, condition: "Clear", humidity: 50, wind: 8 },
+  "Istanbul": { time: "9:30 PM", temp: 27, condition: "Humid", humidity: 60, wind: 13 },
+  "Moscow": { time: "10:30 PM", temp: 19, condition: "Cloudy", humidity: 55, wind: 10 },
+  "Dubai": { time: "11:30 PM", temp: 37, condition: "Hot", humidity: 15, wind: 9 },
+  "Cairo": { time: "9:30 PM", temp: 33, condition: "Clear", humidity: 20, wind: 12 },
+  "Cape Town": { time: "9:30 PM", temp: 17, condition: "Cool", humidity: 50, wind: 11 },
+  "Johannesburg": { time: "9:30 PM", temp: 18, condition: "Cloudy", humidity: 60, wind: 10 },
+  "Lagos": { time: "8:30 PM", temp: 26, condition: "Rain", humidity: 75, wind: 15 },
+  "Nairobi": { time: "10:30 PM", temp: 22, condition: "Showers", humidity: 65, wind: 13 },
+  "Beijing": { time: "4:30 AM", temp: 30, condition: "Smoggy", humidity: 40, wind: 9 },
+  "Shanghai": { time: "4:30 AM", temp: 28, condition: "Cloudy", humidity: 50, wind: 10 },
+  "Seoul": { time: "5:30 AM", temp: 25, condition: "Clear", humidity: 55, wind: 11 },
+  "Bangkok": { time: "3:30 AM", temp: 31, condition: "Rain Showers", humidity: 70, wind: 14 },
+  "Singapore": { time: "3:30 AM", temp: 30, condition: "Humid", humidity: 80, wind: 12 },
+  "Sydney": { time: "6:30 AM", temp: 20, condition: "Sunny", humidity: 40, wind: 10 },
+  "Melbourne": { time: "6:30 AM", temp: 17, condition: "Windy", humidity: 45, wind: 22 },
+  "Auckland": { time: "8:30 AM", temp: 16, condition: "Overcast", humidity: 60, wind: 10 },
+  "Toronto": { time: "2:30 PM", temp: 23, condition: "Clear", humidity: 50, wind: 12 },
+  "Vancouver": { time: "11:30 AM", temp: 19, condition: "Rainy", humidity: 65, wind: 11 },
+  "Montreal": { time: "2:30 PM", temp: 24, condition: "Sunny", humidity: 55, wind: 13 },
+  "Mexico City": { time: "11:30 PM", temp: 22, condition: "Thunderstorms", humidity: 70, wind: 14 },
+  "Buenos Aires": { time: "4:30 PM", temp: 21, condition: "Cloudy", humidity: 65, wind: 13 },
+  "Rio de Janeiro": { time: "4:30 PM", temp: 33, condition: "Hot", humidity: 70, wind: 15 },
+  "Carrollton": { time: "2:30 PM", temp: 94, condition: "Sunny", humidity: 51, wind: 10 }
+
+};
+const cityInput = document.getElementById('cityInput');
+const fetchBtn = document.getElementById('fetchBtn');
+const weatherDisplay = document.getElementById('weatherDisplay');
+const cityNameEl = document.getElementById('cityName');
+const tempEl = document.getElementById('temp');
+const conditionEl = document.getElementById('condition');
+const humidityEl = document.getElementById('humidity');
+const windEl = document.getElementById('wind');
+
+fetchBtn.addEventListener('click', () => {
+  const city = cityInput.value.trim();
+  if(!city){
+    alert('Please enter a city name');
+    return;
+  }
+  
+  if(fakeWeatherAPI[city]){
+    const data = fakeWeatherAPI[city];
+    cityNameEl.textContent = city;
+    tempEl.textContent = data.temp;
+    conditionEl.textContent = data.condition;
+    humidityEl.textContent = data.humidity;
+    windEl.textContent = data.wind;
+    weatherDisplay.style.display = 'block';
+  } else {
+    alert('Weather data for "' + city + '" not found in our fake API.');
+    weatherDisplay.style.display = 'none';
+  }
+});
+// Three.js spinning Earth setup
+const canvas = document.getElementById('earthCanvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0); // transparent background so black shows behind
+
+camera.position.z = 3;
+
+// Earth sphere close-up
+const geometry = new THREE.SphereGeometry(1.5, 64, 64);
+const loader = new THREE.TextureLoader();
+const earthTexture = loader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
+const material = new THREE.MeshPhongMaterial({ map: earthTexture });
+const earth = new THREE.Mesh(geometry, material);
+scene.add(earth);
+
+// Lighting for Earth
+const ambientLight = new THREE.AmbientLight(0x888888);
+scene.add(ambientLight);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+directionalLight.position.set(5,5,5);
+scene.add(directionalLight);
+
+// Animate Earth spinning
+function animate() {
+  requestAnimationFrame(animate);
+  earth.rotation.y += 0.002;
+  renderer.render(scene, camera);
+}
+animate();
+
+// Responsive resizing
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+  </script>
+</body>
+</html>
+  </script>
+</body>
+</html>
