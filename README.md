@@ -1,4 +1,4 @@
-🚀 Small Projects Collection
+🚀 Interactive Web Projects
 
 A collection of simple but impactful projects I built to explore different areas of programming, from APIs and 3D rendering to real-time tracking and game mechanics. Each project showcases key concepts like UI design, interactivity, and basic physics.
 
