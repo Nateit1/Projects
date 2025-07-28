@@ -14,6 +14,7 @@ Built an automated system that monitors device/system statuses and sends real-ti
 <img width="563" height="214" alt="Untitled22" src="https://github.com/user-attachments/assets/931faea2-a8d7-4500-a16d-990ef1b038f1" />
 
 
+
 📍 GPS Tracker
 
 Tech: JavaScript, HTML/CSS
@@ -21,6 +22,7 @@ Tech: JavaScript, HTML/CSS
 Designed a location tracking interface with real-time updates and map visuals to simulate object movement across U.S. locations using mock data.
 
 <img width="594" height="350" alt="Untitled 23" src="https://github.com/user-attachments/assets/88c7f94a-4194-4a14-9ec0-bf876b20e0d1" />
+
 
 
 
